@@ -1,8 +1,8 @@
-target/
+target/*
+!target/*.jar
 *.class
 *.log
 .git
-.gitignore
 .idea/
 *.iml
 .DS_Store
