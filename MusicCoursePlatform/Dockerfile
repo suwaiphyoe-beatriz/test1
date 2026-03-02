@@ -20,4 +20,4 @@ COPY --from=build /app/target/MusicCoursePlatform-1.0-SNAPSHOT.jar app.jar
 RUN groupadd -r appuser && useradd -r -g appuser appuser
 USER appuser
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Dglass.platform=Monocle", "-Dmonocle.platform=Headless", "-Dprism.order=sw", "-jar", "app.jar"]
