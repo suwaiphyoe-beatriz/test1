@@ -10,8 +10,9 @@ RUN mvn clean package -DskipTests
 # -------------------------------
 # Run stage
 # -------------------------------
-FROM bellsoft/liberica:17
+FROM eclipse-temurin:17-jre
 WORKDIR /app
+
 COPY --from=build /app/target/MusicCoursePlatform-1.0-SNAPSHOT.jar app.jar
 
 RUN groupadd -r appuser && useradd -r -g appuser appuser
