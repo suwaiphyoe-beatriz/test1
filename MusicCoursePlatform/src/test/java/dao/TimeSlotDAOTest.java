@@ -24,15 +24,25 @@ public class TimeSlotDAOTest {
         timeSlotDAO = new TimeSlotDAO();
         teacherProfileDAO = new TeacherProfileDAO();
         userDAO = new UserDAO();
-        
-        testUser = new User("test_slot_teacher_" + System.currentTimeMillis(), 
-                           "hashedpassword", 
-                           "test_slot_teacher_" + System.currentTimeMillis() + "@test.com", 
-                           "TEACHER");
+
+        testUser = new User(
+                "test_slot_teacher_" + System.currentTimeMillis(),
+                "hashedpassword",
+                "test_slot_teacher_" + System.currentTimeMillis() + "@test.com",
+                "TEACHER"
+        );
         userDAO.create(testUser);
-        
+
+        // Create FULL valid TeacherProfile
         testTeacherProfile = new TeacherProfile(testUser.getUserId(), "Piano");
-        teacherProfileDAO.create(testTeacherProfile);
+        testTeacherProfile.setBiography("TimeSlot test biography");
+        testTeacherProfile.setYearsExperience(5);
+        testTeacherProfile.setHourlyRate(50);
+        testTeacherProfile.setLocation("Test City");
+
+        boolean created = teacherProfileDAO.create(testTeacherProfile);
+        assertTrue(created);
+        assertTrue(testTeacherProfile.getTeacherProfileId() > 0);
     }
 
     @AfterAll

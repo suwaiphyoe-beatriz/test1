@@ -117,10 +117,18 @@ public class TeacherProfileDAOTest {
     @Order(8)
     void testDelete() {
         TeacherProfile toDelete = new TeacherProfile(testUser.getUserId(), "Violin");
-        teacherProfileDAO.create(toDelete);
-        
+
+        toDelete.setBiography("Delete test biography");
+        toDelete.setYearsExperience(3);
+        toDelete.setHourlyRate(40);
+        toDelete.setLocation("Delete City");
+
+        boolean created = teacherProfileDAO.create(toDelete);
+        assertTrue(created);
+        assertTrue(toDelete.getTeacherProfileId() > 0);
+
         boolean result = teacherProfileDAO.delete(toDelete.getTeacherProfileId());
-        
+
         assertTrue(result);
         assertNull(teacherProfileDAO.findById(toDelete.getTeacherProfileId()));
     }
