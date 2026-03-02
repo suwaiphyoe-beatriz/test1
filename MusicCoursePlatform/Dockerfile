@@ -1,5 +1,5 @@
 # Build stage
-FROM maven:3.9-eclipse-temurin-17 AS build
+FROM --platform=linux/amd64 maven:3.9-eclipse-temurin-17 AS build
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
@@ -9,15 +9,15 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 
-# Install JavaFX manually
-RUN apt-get update && apt-get install -y wget unzip
+# Copy the built JAR file
+COPY --from=build /app/target/app.jar app.jar
 
-# Download JavaFX SDK
-RUN wget https://download2.gluonhq.com/openjfx/21.0.2/openjfx-21.0.2_linux-x64_bin-sdk.zip \
-    && unzip openjfx-21.0.2_linux-x64_bin-sdk.zip \
-    && mv javafx-sdk-21.0.2 /opt/javafx
+# Create a non-root user for security
+RUN groupadd -r appuser && useradd -r -g appuser appuser
+USER appuser
 
-# Copy jar
-COPY --from=build /app/target/MusicCoursePlatform-1.0-SNAPSHOT.jar app.jar
+# Expose port (if needed for future web interface)
+EXPOSE 8080
 
-ENTRYPOINT ["java", "--module-path=/opt/javafx/lib", "--add-modules=javafx.controls,javafx.fxml", "-jar", "app.jar"]
+# Run the application
+ENTRYPOINT ["java", "--module-path", "/usr/share/javafx/lib", "--add-modules", "javafx.controls,javafx.fxml", "-jar", "app.jar"]
