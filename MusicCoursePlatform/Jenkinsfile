@@ -1,34 +1,36 @@
 pipeline {
     agent any
-    
+
     tools {
         maven 'Maven3'
-    
+        jdk 'JDK21'
     }
-    
+
     environment {
-        JAVA_HOME = tool('JDK17')
-        PATH = "${JAVA_HOME}/bin:${env.PATH}"
+        PATH = "/usr/local/bin:${env.PATH}"
+        DOCKER_IMAGE = 'music-course-platform'
+        DOCKER_TAG = 'latest'
     }
-    
+
     stages {
+
         stage('Checkout') {
             steps {
                 echo 'Checking out source code...'
                 checkout scm
             }
         }
-        
+
         stage('Build') {
             steps {
-                echo 'Building the project...'
+                echo 'Building project...'
                 dir('MusicCoursePlatform') {
-                    sh 'mvn clean compile -DskipTests'
+                    sh 'mvn clean compile'
                 }
             }
         }
-        
-        stage('Unit Tests') {
+
+        stage('Test') {
             steps {
                 echo 'Running unit tests...'
                 dir('MusicCoursePlatform') {
@@ -37,14 +39,14 @@ pipeline {
             }
             post {
                 always {
-                    junit testResults: '**/target/surefire-reports/*.xml', allowEmptyResults: true
+                    junit 'MusicCoursePlatform/target/surefire-reports/*.xml'
                 }
             }
         }
-        
-        stage('Code Coverage') {
+
+        stage('Code Coverage Report') {
             steps {
-                echo 'Generating code coverage report...'
+                echo 'Generating JaCoCo report...'
                 dir('MusicCoursePlatform') {
                     sh 'mvn jacoco:report'
                 }
@@ -52,42 +54,61 @@ pipeline {
             post {
                 always {
                     jacoco(
-                        execPattern: '**/target/jacoco.exec',
-                        classPattern: '**/target/classes',
-                        sourcePattern: '**/src/main/java',
-                        exclusionPattern: '**/test/**'
+                            execPattern: 'MusicCoursePlatform/target/jacoco.exec',
+                            classPattern: 'MusicCoursePlatform/target/classes',
+                            sourcePattern: 'MusicCoursePlatform/src/main/java',
+                            exclusionPattern: '**/test/**'
                     )
                 }
             }
         }
-        
+
         stage('Package') {
             steps {
-                echo 'Packaging the application...'
+                echo 'Packaging application...'
                 dir('MusicCoursePlatform') {
                     sh 'mvn package -DskipTests'
                 }
             }
         }
+
+        stage('Archive Artifact') {
+            steps {
+                echo 'Archiving JAR file...'
+                archiveArtifacts artifacts: 'MusicCoursePlatform/target/*.jar',
+                        fingerprint: true
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                echo 'Building Docker image...'
+                dir('MusicCoursePlatform') {
+                    sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+                }
+            }
+        }
     }
-    
+
     post {
         always {
-            echo 'Pipeline completed.'
+            echo 'Publishing HTML coverage report...'
             publishHTML(target: [
-                allowMissing: true,
-                alwaysLinkToLastBuild: true,
-                keepAll: true,
-                reportDir: 'MusicCoursePlatform/target/site/jacoco',
-                reportFiles: 'index.html',
-                reportName: 'JaCoCo Code Coverage Report'
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'MusicCoursePlatform/target/site/jacoco',
+                    reportFiles: 'index.html',
+                    reportName: 'JaCoCo Code Coverage Report'
             ])
         }
+
         success {
-            echo 'Build succeeded!'
+            echo 'Pipeline completed successfully!'
         }
+
         failure {
-            echo 'Build failed!'
+            echo 'Pipeline failed!'
         }
     }
 }
