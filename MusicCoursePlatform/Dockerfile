@@ -12,12 +12,12 @@ RUN mvn clean package -DskipTests
 # -------------------------------
 FROM eclipse-temurin:17-jre
 WORKDIR /app
-
-# THE FIX: Point exactly to the SNAPSHOT jar to avoid the "original" one
 COPY --from=build /app/target/MusicCoursePlatform-1.0-SNAPSHOT.jar app.jar
 
-# Create a non-root user for security
 RUN groupadd -r appuser && useradd -r -g appuser appuser
 USER appuser
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# THE FIX: 
+# 1. We treat the jar as the module-path.
+# 2. We explicitly add the modules the JVM is looking for.
+ENTRYPOINT ["java", "--module-path", "app.jar", "--add-modules", "javafx.controls,javafx.fxml", "-jar", "app.jar"]
