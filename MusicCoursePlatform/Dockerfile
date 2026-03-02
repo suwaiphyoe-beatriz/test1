@@ -20,7 +20,4 @@ RUN wget https://download2.gluonhq.com/openjfx/21.0.2/openjfx-21.0.2_linux-x64_b
 # Copy jar
 COPY --from=build /app/target/MusicCoursePlatform-1.0-SNAPSHOT.jar app.jar
 
-ENTRYPOINT ["java",
-"--module-path", "/opt/javafx/lib",
-"--add-modules", "javafx.controls,javafx.fxml",
-"-jar", "app.jar"]
+ENTRYPOINT ["java", "--module-path=/opt/javafx/lib", "--add-modules=javafx.controls,javafx.fxml", "-jar", "app.jar"]
