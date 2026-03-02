@@ -10,7 +10,7 @@ FROM eclipse-temurin:17-jre
 WORKDIR /app
 
 # Copy the built JAR file
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /app/target/app.jar app.jar
 
 # Create a non-root user for security
 RUN groupadd -r appuser && useradd -r -g appuser appuser
