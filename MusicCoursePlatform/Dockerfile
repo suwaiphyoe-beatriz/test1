@@ -19,5 +19,5 @@ COPY --from=build /app/target/MusicCoursePlatform-1.0-SNAPSHOT.jar app.jar
 # Create a non-root user for security
 RUN groupadd -r appuser && useradd -r -g appuser appuser
 USER appuser
-
-ENTRYPOINT ["java", "-Dglass.platform=Monocle", "-Dmonocle.platform=Headless", "-Dprism.order=sw", "-jar", "app.jar"]
+# This forces the JAR to run even without a module-path
+ENTRYPOINT ["java", "--add-modules", "javafx.controls,javafx.fxml", "-jar", "app.jar"]
