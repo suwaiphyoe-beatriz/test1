@@ -21,8 +21,6 @@
         <javafx.version>21.0.2</javafx.version>
         <junit.version>5.9.3</junit.version>
         <jacoco.version>0.8.12</jacoco.version>
-        <!-- Platform classifier for JavaFX -->
-        <javafx.platform>linux-aarch64</javafx.platform>
     </properties>
 
     <dependencies>
@@ -32,7 +30,6 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>${javafx.version}</version>
-            <classifier>${javafx.platform}</classifier>
         </dependency>
 
         <!-- JavaFX FXML -->
@@ -40,7 +37,6 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
             <version>${javafx.version}</version>
-            <classifier>${javafx.platform}</classifier>
         </dependency>
 
         <!-- MariaDB JDBC Driver -->
@@ -50,7 +46,7 @@
             <version>3.1.4</version>
         </dependency>
 
-        <!-- Logging (SLF4J + Logback) -->
+        <!-- Logging (SLF4J + Logback implementation) -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
@@ -65,7 +61,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- JUnit Platform Launcher -->
+        <!-- JUnit Platform Launcher (for IDE compatibility) -->
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
@@ -132,21 +128,6 @@
                 <version>0.0.8</version>
                 <configuration>
                     <mainClass>Main</mainClass>
-                    <launcher>jar</launcher>
-                </configuration>
-            </plugin>
-
-            <!-- Maven JAR Plugin (add Main-Class manifest) -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.4.1</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>Main</mainClass>
-                        </manifest>
-                    </archive>
                 </configuration>
             </plugin>
 
