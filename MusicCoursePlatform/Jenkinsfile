@@ -25,17 +25,19 @@ pipeline {
         }
 
         stage('Setup Database') {
-            steps {
-                echo 'Creating database schema...'
-                dir('MusicCoursePlatform') {
-                    withCredentials([string(credentialsId: 'DB_PASSWORD', variable: 'DB_PASSWORD')]) {
-                        sh '''
-                            /opt/anaconda3/bin/mysql -u root -p$DB_PASSWORD < database/schema.sql
-                        '''
-                    }
-                }
+    steps {
+        dir('MusicCoursePlatform') {
+            withCredentials([string(credentialsId: 'DB_PASSWORD', variable: 'DB_PASSWORD')]) {
+                sh '''
+                    /opt/anaconda3/bin/mysql -u root -p$DB_PASSWORD -e "
+                    CREATE DATABASE IF NOT EXISTS music_course_platform;
+                    "
+                    /opt/anaconda3/bin/mysql -u root -p$DB_PASSWORD music_course_platform < database/schema.sql
+                '''
             }
         }
+    }
+}
 
         stage('Build') {
             steps {
