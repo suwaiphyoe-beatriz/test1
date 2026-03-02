@@ -7,6 +7,9 @@ pipeline {
     }
 
     environment {
+        // Add Anaconda MySQL to PATH (important for your setup)
+        PATH = "/opt/anaconda3/bin:/usr/local/bin:${env.PATH}"
+
         DOCKER_IMAGE = 'music-course-platform'
         DOCKER_TAG = 'latest'
         DB_NAME = 'music_lesson_db'
@@ -16,20 +19,19 @@ pipeline {
 
         stage('Checkout') {
             steps {
+                echo 'Checking out source code...'
                 checkout scm
             }
         }
 
         stage('Setup Database') {
             steps {
+                echo 'Creating database schema...'
                 dir('MusicCoursePlatform') {
                     withCredentials([string(credentialsId: 'DB_PASSWORD', variable: 'DB_PASSWORD')]) {
-                        sh """
-                            mysql -u root -p$DB_PASSWORD -e "
-                            CREATE DATABASE IF NOT EXISTS ${DB_NAME};
-                            "
-                            mysql -u root -p$DB_PASSWORD ${DB_NAME} < database/schema.sql
-                        """
+                        sh '''
+                            /opt/anaconda3/bin/mysql -u root -p$DB_PASSWORD < database/schema.sql
+                        '''
                     }
                 }
             }
@@ -37,6 +39,7 @@ pipeline {
 
         stage('Build') {
             steps {
+                echo 'Building project...'
                 dir('MusicCoursePlatform') {
                     sh 'mvn clean compile'
                 }
@@ -45,6 +48,7 @@ pipeline {
 
         stage('Test') {
             steps {
+                echo 'Running unit tests...'
                 dir('MusicCoursePlatform') {
                     sh 'mvn test'
                 }
@@ -56,8 +60,9 @@ pipeline {
             }
         }
 
-        stage('Code Coverage') {
+        stage('Code Coverage Report') {
             steps {
+                echo 'Generating JaCoCo report...'
                 dir('MusicCoursePlatform') {
                     sh 'mvn jacoco:report'
                 }
@@ -75,6 +80,7 @@ pipeline {
 
         stage('Package') {
             steps {
+                echo 'Packaging application...'
                 dir('MusicCoursePlatform') {
                     sh 'mvn package -DskipTests'
                 }
@@ -83,12 +89,15 @@ pipeline {
 
         stage('Archive Artifact') {
             steps {
-                archiveArtifacts artifacts: 'MusicCoursePlatform/target/*.jar', fingerprint: true
+                echo 'Archiving JAR file...'
+                archiveArtifacts artifacts: 'MusicCoursePlatform/target/*.jar',
+                        fingerprint: true
             }
         }
 
         stage('Build Docker Image') {
             steps {
+                echo 'Building Docker image...'
                 dir('MusicCoursePlatform') {
                     sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
                 }
@@ -100,6 +109,7 @@ pipeline {
         success {
             echo 'Pipeline completed successfully!'
         }
+
         failure {
             echo 'Pipeline failed!'
         }
