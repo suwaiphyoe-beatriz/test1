@@ -10,7 +10,7 @@ RUN mvn clean package -DskipTests
 # -------------------------------
 # Run stage
 # -------------------------------
-FROM bellsoft/liberica-openjfx:17
+FROM bellsoft/liberica:17
 WORKDIR /app
 COPY --from=build /app/target/MusicCoursePlatform-1.0-SNAPSHOT.jar app.jar
 
