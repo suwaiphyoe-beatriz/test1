@@ -19,5 +19,5 @@ COPY --from=build /app/target/MusicCoursePlatform-1.0-SNAPSHOT.jar app.jar
 # Create a non-root user for security
 RUN groupadd -r appuser && useradd -r -g appuser appuser
 USER appuser
-# This forces the JAR to run even without a module-path
-ENTRYPOINT ["java", "--add-modules", "javafx.controls,javafx.fxml", "-jar", "app.jar"]
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
