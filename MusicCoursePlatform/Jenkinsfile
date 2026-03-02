@@ -7,9 +7,12 @@ pipeline {
     }
 
     environment {
-        PATH = "/usr/local/bin:${env.PATH}"
+        // Add Anaconda MySQL to PATH (important for your setup)
+        PATH = "/opt/anaconda3/bin:/usr/local/bin:${env.PATH}"
+
         DOCKER_IMAGE = 'music-course-platform'
         DOCKER_TAG = 'latest'
+        DB_NAME = 'music_lesson_db'
     }
 
     stages {
@@ -18,6 +21,19 @@ pipeline {
             steps {
                 echo 'Checking out source code...'
                 checkout scm
+            }
+        }
+
+        stage('Setup Database') {
+            steps {
+                echo 'Creating database schema...'
+                dir('MusicCoursePlatform') {
+                    withCredentials([string(credentialsId: 'DB_PASSWORD', variable: 'DB_PASSWORD')]) {
+                        sh '''
+                            /opt/anaconda3/bin/mysql -u root -p$DB_PASSWORD < database/schema.sql
+                        '''
+                    }
+                }
             }
         }
 
@@ -54,10 +70,9 @@ pipeline {
             post {
                 always {
                     jacoco(
-                            execPattern: 'MusicCoursePlatform/target/jacoco.exec',
-                            classPattern: 'MusicCoursePlatform/target/classes',
-                            sourcePattern: 'MusicCoursePlatform/src/main/java',
-                            exclusionPattern: '**/test/**'
+                        execPattern: 'MusicCoursePlatform/target/jacoco.exec',
+                        classPattern: 'MusicCoursePlatform/target/classes',
+                        sourcePattern: 'MusicCoursePlatform/src/main/java'
                     )
                 }
             }
@@ -91,18 +106,6 @@ pipeline {
     }
 
     post {
-        always {
-            echo 'Publishing HTML coverage report...'
-            publishHTML(target: [
-                    allowMissing: true,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: 'MusicCoursePlatform/target/site/jacoco',
-                    reportFiles: 'index.html',
-                    reportName: 'JaCoCo Code Coverage Report'
-            ])
-        }
-
         success {
             echo 'Pipeline completed successfully!'
         }
