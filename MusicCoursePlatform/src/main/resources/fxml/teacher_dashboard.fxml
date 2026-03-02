@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="controller.TeacherDashboardController"
+            stylesheets="@../css/styles.css"
+            prefHeight="700.0" prefWidth="1000.0">
+    
+    <!-- Top Navbar -->
+    <top>
+        <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="20">
+            <Label text="MusicCoursePlatform" styleClass="navbar-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <ComboBox fx:id="languageCombo" promptText="EN" prefWidth="80"/>
+            <Circle fx:id="avatarCircle" radius="20" style="-fx-fill: #E2E8F0;"/>
+            <Circle radius="6" style="-fx-fill: #E53E3E;"/>
+        </HBox>
+    </top>
+    
+    <!-- Main Content -->
+    <center>
+        <HBox style="-fx-background-color: #F5F5F5;" spacing="0">
+            <padding>
+                <Insets top="30" right="30" bottom="30" left="30"/>
+            </padding>
+            
+            <!-- Main Card -->
+            <VBox styleClass="card" spacing="20" HBox.hgrow="ALWAYS">
+                <padding>
+                    <Insets top="30" right="30" bottom="30" left="30"/>
+                </padding>
+                
+                <HBox spacing="30" alignment="TOP_LEFT" VBox.vgrow="ALWAYS">
+                    <!-- Left Panel - Profile -->
+                    <VBox spacing="16" prefWidth="220">
+                        <!-- Avatar and Name -->
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <Circle radius="25" style="-fx-fill: #CBD5E0;"/>
+                            <Label fx:id="nameLabel" text="Name" styleClass="teacher-name"/>
+                        </HBox>
+                        
+                        <!-- Instruments Dropdown -->
+                        <ComboBox fx:id="instrumentsCombo" 
+                                  promptText="Instruments" 
+                                  prefWidth="200"/>
+                        
+                        <!-- Pricing Field -->
+                        <TextField fx:id="pricingField" 
+                                   promptText="Pricing ($/hr)" 
+                                   styleClass="text-field"
+                                   prefWidth="200"/>
+                        
+                        <!-- Bio -->
+                        <TextArea fx:id="bioField" 
+                                  promptText="Edit Bio" 
+                                  prefWidth="200" 
+                                  prefHeight="100"
+                                  wrapText="true"/>
+                        
+                        <!-- Save Profile Button -->
+                        <Button text="Save Profile" 
+                                styleClass="primary-button"
+                                onAction="#handleSaveProfile"
+                                prefWidth="200"/>
+                    </VBox>
+                    
+                    <!-- Center Panel - Calendar -->
+                    <VBox spacing="16" alignment="TOP_CENTER">
+                        <Label text="Frame" style="-fx-text-fill: #A0AEC0; -fx-font-size: 14px;"/>
+                        
+                        <!-- Month Navigation -->
+                        <HBox alignment="CENTER" spacing="12">
+                            <Button text="‹" styleClass="back-button" onAction="#handlePrevMonth"/>
+                            <Label fx:id="monthLabel" text="September 2026" styleClass="calendar-header"/>
+                            <Button text="›" styleClass="back-button" onAction="#handleNextMonth"/>
+                        </HBox>
+                        
+                        <!-- Calendar Grid -->
+                        <VBox spacing="8" alignment="CENTER">
+                            <!-- Day headers -->
+                            <HBox spacing="8" alignment="CENTER">
+                                <Label text="So." prefWidth="40" style="-fx-text-fill: #718096; -fx-alignment: CENTER;"/>
+                                <Label text="Mo." prefWidth="40" style="-fx-text-fill: #718096; -fx-alignment: CENTER;"/>
+                                <Label text="Di." prefWidth="40" style="-fx-text-fill: #718096; -fx-alignment: CENTER;"/>
+                                <Label text="Mi." prefWidth="40" style="-fx-text-fill: #718096; -fx-alignment: CENTER;"/>
+                                <Label text="Do." prefWidth="40" style="-fx-text-fill: #718096; -fx-alignment: CENTER;"/>
+                                <Label text="Fr." prefWidth="40" style="-fx-text-fill: #718096; -fx-alignment: CENTER;"/>
+                                <Label text="Sa." prefWidth="40" style="-fx-text-fill: #718096; -fx-alignment: CENTER;"/>
+                            </HBox>
+                            <FlowPane fx:id="calendarGrid" hgap="8" vgap="8" prefWidth="336"/>
+                        </VBox>
+                    </VBox>
+                    
+                    <!-- Right Panel - Set Availability -->
+                    <VBox spacing="16" prefWidth="220">
+                        <Label text="View Schedule" styleClass="section-title"/>
+                        
+                        <Label fx:id="selectedDateLabel" text="Select a date" style="-fx-text-fill: #718096;"/>
+                        
+                        <!-- Time Input -->
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Button fx:id="startTimeBtn" text="Start" styleClass="secondary-button" prefWidth="70"/>
+                            <Button fx:id="endTimeBtn" text="End" styleClass="primary-button" prefWidth="70"/>
+                        </HBox>
+                        
+                        <!-- Add Time Slot -->
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <ComboBox fx:id="startTimeCombo" promptText="Start" prefWidth="90"/>
+                            <Label text="-"/>
+                            <ComboBox fx:id="endTimeCombo" promptText="End" prefWidth="90"/>
+                        </HBox>
+                        
+                        <Button text="Add Time Slot" 
+                                styleClass="primary-button"
+                                onAction="#handleAddTimeSlot"
+                                prefWidth="200"/>
+                        
+                        <!-- Existing Time Slots -->
+                        <ScrollPane fitToWidth="true" prefHeight="200" style="-fx-background-color: transparent;">
+                            <VBox fx:id="timeSlotsContainer" spacing="10">
+                                <!-- Time slots will be populated dynamically -->
+                            </VBox>
+                        </ScrollPane>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </HBox>
+    </center>
+    
+    <!-- Bottom Navigation -->
+    <bottom>
+        <HBox alignment="CENTER" spacing="20" style="-fx-background-color: #F5F5F5; -fx-padding: 20;">
+            <Button text="‹" styleClass="back-button" onAction="#handlePrevPage"/>
+            <Button text="›" styleClass="back-button" onAction="#handleNextPage"/>
+        </HBox>
+    </bottom>
+</BorderPane>

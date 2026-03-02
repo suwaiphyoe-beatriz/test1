@@ -1,0 +1,370 @@
+/* Global Styles for Music Course Platform */
+
+/* Color Variables */
+.root {
+    -fx-primary-color: #2D4A47;
+    -fx-primary-hover: #3D5A57;
+    -fx-background-color: #F5F5F5;
+    -fx-text-color: #2D3748;
+    -fx-border-color: #E2E8F0;
+    -fx-error-color: #E53E3E;
+    -fx-success-color: #38A169;
+}
+
+/* Main Container */
+.main-container {
+    -fx-background-color: #F5F5F5;
+    -fx-padding: 40;
+}
+
+/* Card Style */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+    -fx-padding: 40;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0, 0, 2);
+}
+
+/* Title Styles */
+.page-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2D3748;
+}
+
+.section-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2D3748;
+}
+
+/* Back Button */
+.back-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #2D3748;
+    -fx-font-size: 24px;
+    -fx-cursor: hand;
+}
+
+.back-button:hover {
+    -fx-text-fill: #2D4A47;
+}
+
+/* Text Field Styles */
+.text-field, .password-field {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-padding: 16 20;
+    -fx-font-size: 16px;
+    -fx-pref-height: 56;
+}
+
+.text-field:focused, .password-field:focused {
+    -fx-border-color: #2D4A47;
+    -fx-border-width: 2;
+}
+
+.text-field .text, .password-field .text {
+    -fx-fill: #2D3748;
+}
+
+/* Primary Button */
+.primary-button {
+    -fx-background-color: #2D4A47;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-padding: 16 32;
+    -fx-cursor: hand;
+    -fx-pref-height: 56;
+}
+
+.primary-button:hover {
+    -fx-background-color: #3D5A57;
+}
+
+.primary-button:pressed {
+    -fx-background-color: #1D3A37;
+}
+
+/* Secondary Button */
+.secondary-button {
+    -fx-background-color: white;
+    -fx-text-fill: #2D4A47;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-border-color: #2D4A47;
+    -fx-border-radius: 12;
+    -fx-border-width: 2;
+    -fx-padding: 14 30;
+    -fx-cursor: hand;
+    -fx-pref-height: 56;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #F7FAFC;
+}
+
+/* Hyperlink */
+.link {
+    -fx-text-fill: #2D3748;
+    -fx-font-size: 14px;
+}
+
+.link:hover {
+    -fx-text-fill: #2D4A47;
+    -fx-underline: true;
+}
+
+/* Header/Navbar */
+.navbar {
+    -fx-background-color: white;
+    -fx-padding: 16 32;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 4, 0, 0, 1);
+}
+
+.navbar-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2D3748;
+    -fx-font-family: "Courier New";
+}
+
+/* Calendar Styles */
+.calendar-container {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-padding: 20;
+}
+
+.calendar-header {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2D3748;
+}
+
+.calendar-day {
+    -fx-background-color: transparent;
+    -fx-text-fill: #718096;
+    -fx-font-size: 14px;
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-background-radius: 20;
+}
+
+.calendar-day-available {
+    -fx-background-color: #2D4A47;
+    -fx-text-fill: white;
+}
+
+.calendar-day-selected {
+    -fx-background-color: #2D4A47;
+    -fx-text-fill: white;
+}
+
+.calendar-day:hover {
+    -fx-background-color: #E2E8F0;
+}
+
+/* Time Slot Styles */
+.time-slot {
+    -fx-background-color: white;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 12 20;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+.time-slot:hover {
+    -fx-border-color: #2D4A47;
+}
+
+.time-slot-selected {
+    -fx-background-color: #2D4A47;
+    -fx-text-fill: white;
+    -fx-border-color: #2D4A47;
+}
+
+.time-slot-booked {
+    -fx-background-color: #FED7D7;
+    -fx-border-color: #FC8181;
+    -fx-text-fill: #C53030;
+}
+
+/* Teacher Card */
+.teacher-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 8, 0, 0, 2);
+}
+
+.teacher-name {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2D3748;
+}
+
+.teacher-info {
+    -fx-font-size: 14px;
+    -fx-text-fill: #718096;
+}
+
+/* Avatar */
+.avatar {
+    -fx-background-color: #E2E8F0;
+    -fx-background-radius: 30;
+    -fx-pref-width: 60;
+    -fx-pref-height: 60;
+}
+
+.avatar-small {
+    -fx-background-radius: 20;
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+}
+
+/* Dropdown/ComboBox */
+.combo-box {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 8;
+    -fx-padding: 8 12;
+}
+
+/* Booking Card */
+.booking-card {
+    -fx-background-color: white;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 16;
+}
+
+.booking-card-confirmed {
+    -fx-border-color: #2D4A47;
+    -fx-border-width: 2;
+}
+
+/* Status Badge */
+.status-pending {
+    -fx-background-color: #FEFCE8;
+    -fx-text-fill: #854D0E;
+    -fx-background-radius: 4;
+    -fx-padding: 4 8;
+}
+
+.status-confirmed {
+    -fx-background-color: #DCFCE7;
+    -fx-text-fill: #166534;
+    -fx-background-radius: 4;
+    -fx-padding: 4 8;
+}
+
+.status-cancelled {
+    -fx-background-color: #FEE2E2;
+    -fx-text-fill: #991B1B;
+    -fx-background-radius: 4;
+    -fx-padding: 4 8;
+}
+
+/* Error/Warning Labels */
+.error-label {
+    -fx-text-fill: #E53E3E;
+    -fx-font-size: 12px;
+}
+
+.success-label {
+    -fx-text-fill: #38A169;
+    -fx-font-size: 12px;
+}
+
+/* Scrollbar Styling */
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #CBD5E0;
+    -fx-background-radius: 4;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #A0AEC0;
+}
+
+/* Mini Time Slot for Week View */
+.time-slot-mini {
+    -fx-background-color: #E8F5F3;
+    -fx-text-fill: #2D4A47;
+    -fx-background-radius: 6;
+    -fx-padding: 6 10;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+}
+
+.time-slot-mini:hover {
+    -fx-background-color: #2D4A47;
+    -fx-text-fill: white;
+}
+
+/* Day Column for Week View */
+.day-column {
+    -fx-background-color: #F7FAFC;
+    -fx-background-radius: 8;
+    -fx-padding: 12;
+    -fx-min-width: 100;
+}
+
+/* Navigation Link */
+.nav-link {
+    -fx-background-color: transparent;
+    -fx-text-fill: #718096;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+.nav-link:hover {
+    -fx-text-fill: #2D4A47;
+}
+
+/* Progress Step Circle */
+.step-active {
+    -fx-fill: #2D4A47;
+}
+
+.step-inactive {
+    -fx-fill: #CBD5E0;
+}
+
+/* Confirmation Panel */
+.confirm-box {
+    -fx-background-color: #F7FAFC;
+    -fx-background-radius: 12;
+    -fx-padding: 20;
+}
+
+/* Text Area */
+.text-area {
+    -fx-background-color: white;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 12;
+}

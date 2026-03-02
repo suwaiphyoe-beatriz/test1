@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="controller.StudentDashboardController"
+            stylesheets="@../css/styles.css"
+            prefHeight="700.0" prefWidth="1000.0">
+    
+    <!-- Top Navbar -->
+    <top>
+        <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="20">
+            <Label text="MusicCoursePlatform" styleClass="navbar-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <ComboBox fx:id="languageCombo" promptText="EN" prefWidth="80"/>
+            <Circle fx:id="avatarCircle" radius="20" style="-fx-fill: #E2E8F0;"/>
+            <Circle radius="6" style="-fx-fill: #E53E3E;"/>
+        </HBox>
+    </top>
+    
+    <!-- Main Content -->
+    <center>
+        <HBox style="-fx-background-color: #F5F5F5;" spacing="0">
+            <padding>
+                <Insets top="30" right="30" bottom="30" left="30"/>
+            </padding>
+            
+            <!-- Main Card -->
+            <VBox styleClass="card" spacing="20" HBox.hgrow="ALWAYS">
+                <padding>
+                    <Insets top="30" right="30" bottom="30" left="30"/>
+                </padding>
+                
+                <HBox spacing="30" alignment="TOP_LEFT" VBox.vgrow="ALWAYS">
+                    <!-- Left Panel - Teacher Selection -->
+                    <VBox spacing="16" prefWidth="260">
+                        <!-- Filter by Instrument -->
+                        <Label text="Filter by Instrument" style="-fx-font-weight: bold; -fx-text-fill: #2D3748;"/>
+                        <ComboBox fx:id="instrumentCombo" 
+                                  promptText="Piano" 
+                                  prefWidth="240"
+                                  onAction="#handleInstrumentChange"/>
+                        
+                        <!-- Select Teacher -->
+                        <Label text="Select Teacher" style="-fx-font-weight: bold; -fx-text-fill: #2D3748;"/>
+                        <ComboBox fx:id="teacherCombo" 
+                                  promptText="Select Teacher" 
+                                  prefWidth="240"
+                                  onAction="#handleTeacherChange"/>
+                        
+                        <!-- Teacher Profile Card -->
+                        <VBox spacing="12" style="-fx-background-color: #F7FAFC; -fx-background-radius: 12; -fx-padding: 16;">
+                            <!-- Avatar and Name -->
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <Circle radius="30" style="-fx-fill: #CBD5E0;"/>
+                                <VBox spacing="2">
+                                    <Label fx:id="teacherNameLabel" text="Select a teacher" styleClass="teacher-name"/>
+                                    <Label fx:id="teacherInstrumentLabel" text="" style="-fx-text-fill: #718096; -fx-font-size: 12px;"/>
+                                </VBox>
+                            </HBox>
+                            
+                            <!-- Teacher Details -->
+                            <HBox spacing="16">
+                                <VBox spacing="2">
+                                    <Label text="Experience" style="-fx-text-fill: #A0AEC0; -fx-font-size: 10px;"/>
+                                    <Label fx:id="teacherExperienceLabel" text="" style="-fx-font-weight: bold; -fx-font-size: 12px;"/>
+                                </VBox>
+                                <VBox spacing="2">
+                                    <Label text="Rate" style="-fx-text-fill: #A0AEC0; -fx-font-size: 10px;"/>
+                                    <Label fx:id="teacherRateLabel" text="" style="-fx-font-weight: bold; -fx-font-size: 12px; -fx-text-fill: #2D4A47;"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                        
+                        <!-- Action Buttons -->
+                        <Button text="View Full Profile" 
+                                styleClass="secondary-button"
+                                onAction="#handleViewProfile"
+                                prefWidth="240"/>
+                    </VBox>
+                    
+                    <!-- Center Panel - Calendar -->
+                    <VBox spacing="16" alignment="TOP_CENTER">
+                        <Label text="Frame" style="-fx-text-fill: #A0AEC0; -fx-font-size: 14px;"/>
+                        
+                        <!-- Month Navigation -->
+                        <HBox alignment="CENTER" spacing="12">
+                            <Button fx:id="prevMonthBtn" text="‹" styleClass="back-button" onAction="#handlePrevMonth"/>
+                            <Label fx:id="monthLabel" text="September 2026" styleClass="calendar-header"/>
+                            <Button fx:id="nextMonthBtn" text="›" styleClass="back-button" onAction="#handleNextMonth"/>
+                        </HBox>
+                        
+                        <!-- Calendar Grid -->
+                        <VBox fx:id="calendarContainer" spacing="8" alignment="CENTER">
+                            <!-- Day headers -->
+                            <HBox spacing="8" alignment="CENTER">
+                                <Label text="Sun" prefWidth="40" style="-fx-text-fill: #718096; -fx-alignment: CENTER;"/>
+                                <Label text="Mon" prefWidth="40" style="-fx-text-fill: #718096; -fx-alignment: CENTER;"/>
+                                <Label text="Tue" prefWidth="40" style="-fx-text-fill: #718096; -fx-alignment: CENTER;"/>
+                                <Label text="Wed" prefWidth="40" style="-fx-text-fill: #718096; -fx-alignment: CENTER;"/>
+                                <Label text="Thu" prefWidth="40" style="-fx-text-fill: #718096; -fx-alignment: CENTER;"/>
+                                <Label text="Fri" prefWidth="40" style="-fx-text-fill: #718096; -fx-alignment: CENTER;"/>
+                                <Label text="Sat" prefWidth="40" style="-fx-text-fill: #718096; -fx-alignment: CENTER;"/>
+                            </HBox>
+                            <!-- Calendar days will be populated dynamically -->
+                            <FlowPane fx:id="calendarGrid" hgap="8" vgap="8" prefWidth="336"/>
+                        </VBox>
+                    </VBox>
+                    
+                    <!-- Right Panel - Time Slots / View Schedule -->
+                    <VBox spacing="16" prefWidth="200">
+                        <Label text="Available Times" styleClass="section-title"/>
+                        
+                        <Label fx:id="selectedDateLabel" text="Select a date" style="-fx-text-fill: #718096;"/>
+                        
+                        <ScrollPane fitToWidth="true" prefHeight="250" style="-fx-background-color: transparent;">
+                            <VBox fx:id="timeSlotsContainer" spacing="10">
+                                <!-- Time slots will be populated dynamically -->
+                            </VBox>
+                        </ScrollPane>
+                        
+                        <!-- Selected Time Display -->
+                        <VBox spacing="8" style="-fx-background-color: #F7FAFC; -fx-background-radius: 8; -fx-padding: 12;">
+                            <Label text="Selected Time:" style="-fx-text-fill: #718096; -fx-font-size: 12px;"/>
+                            <Label fx:id="selectedTimeLabel" text="None selected" style="-fx-font-weight: bold;"/>
+                        </VBox>
+                        
+                        <!-- Book Button -->
+                        <Button fx:id="bookButton" text="Book a Lesson" 
+                                styleClass="primary-button"
+                                onAction="#handleBookNow"
+                                prefWidth="180"
+                                disable="true"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </HBox>
+    </center>
+    
+    <!-- Bottom Navigation -->
+    <bottom>
+        <HBox alignment="CENTER" spacing="20" style="-fx-background-color: #F5F5F5; -fx-padding: 20;">
+            <Button text="‹" styleClass="back-button" onAction="#handlePrevPage"/>
+            <Button text="›" styleClass="back-button" onAction="#handleNextPage"/>
+        </HBox>
+    </bottom>
+</BorderPane>

@@ -1,0 +1,114 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven3'
+        jdk 'JDK17'
+    }
+
+    environment {
+        PATH = "/usr/local/bin:${env.PATH}"
+        DOCKER_IMAGE = 'music-course-platform'
+        DOCKER_TAG = 'latest'
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                echo 'Checking out source code...'
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Building project...'
+                dir('MusicCoursePlatform') {
+                    sh 'mvn clean compile'
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Running unit tests...'
+                dir('MusicCoursePlatform') {
+                    sh 'mvn test'
+                }
+            }
+            post {
+                always {
+                    junit 'MusicCoursePlatform/target/surefire-reports/*.xml'
+                }
+            }
+        }
+
+        stage('Code Coverage Report') {
+            steps {
+                echo 'Generating JaCoCo report...'
+                dir('MusicCoursePlatform') {
+                    sh 'mvn jacoco:report'
+                }
+            }
+            post {
+                always {
+                    jacoco(
+                            execPattern: 'MusicCoursePlatform/target/jacoco.exec',
+                            classPattern: 'MusicCoursePlatform/target/classes',
+                            sourcePattern: 'MusicCoursePlatform/src/main/java',
+                            exclusionPattern: '**/test/**'
+                    )
+                }
+            }
+        }
+
+        stage('Package') {
+            steps {
+                echo 'Packaging application...'
+                dir('MusicCoursePlatform') {
+                    sh 'mvn package -DskipTests'
+                }
+            }
+        }
+
+        stage('Archive Artifact') {
+            steps {
+                echo 'Archiving JAR file...'
+                archiveArtifacts artifacts: 'MusicCoursePlatform/target/*.jar',
+                        fingerprint: true
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                echo 'Building Docker image...'
+                dir('MusicCoursePlatform') {
+                    sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Publishing HTML coverage report...'
+            publishHTML(target: [
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'MusicCoursePlatform/target/site/jacoco',
+                    reportFiles: 'index.html',
+                    reportName: 'JaCoCo Code Coverage Report'
+            ])
+        }
+
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+
+        failure {
+            echo 'Pipeline failed!'
+        }
+    }
+}

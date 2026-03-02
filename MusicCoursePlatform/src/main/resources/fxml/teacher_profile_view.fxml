@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="controller.TeacherProfileViewController"
+            stylesheets="@../css/styles.css"
+            prefHeight="700.0" prefWidth="1000.0">
+    
+    <!-- Top Navbar -->
+    <top>
+        <HBox styleClass="navbar" alignment="CENTER_LEFT" spacing="20">
+            <Button text="‹" styleClass="back-button" onAction="#handleBack"/>
+            <Label text="MusicCoursePlatform" styleClass="navbar-title"/>
+            <HBox alignment="CENTER_RIGHT" spacing="15" HBox.hgrow="ALWAYS">
+                <Button text="Home" styleClass="nav-link"/>
+                <Button text="Teachers" styleClass="nav-link"/>
+                <Button text="My Bookings" styleClass="nav-link"/>
+                <Button text="Logout" styleClass="secondary-button" onAction="#handleLogout"/>
+            </HBox>
+        </HBox>
+    </top>
+    
+    <!-- Main Content -->
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: #F5F5F5;">
+            <VBox spacing="30" style="-fx-background-color: #F5F5F5;">
+                <padding>
+                    <Insets top="30" right="50" bottom="30" left="50"/>
+                </padding>
+                
+                <!-- Teacher Header Card -->
+                <VBox styleClass="card" spacing="20">
+                    <padding>
+                        <Insets top="30" right="30" bottom="30" left="30"/>
+                    </padding>
+                    
+                    <HBox spacing="30" alignment="TOP_LEFT">
+                        <!-- Teacher Avatar -->
+                        <VBox alignment="CENTER" spacing="10">
+                            <Circle radius="60" style="-fx-fill: #CBD5E0;"/>
+                            <Label text="★ 4.9" style="-fx-font-size: 14px; -fx-text-fill: #F6AD55;"/>
+                        </VBox>
+                        
+                        <!-- Teacher Info -->
+                        <VBox spacing="12" HBox.hgrow="ALWAYS">
+                            <Label fx:id="teacherNameLabel" text="Teacher Name" 
+                                   style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
+                            <Label fx:id="titleLabel" text="Founder &amp; Head of IT" 
+                                   style="-fx-font-size: 14px; -fx-text-fill: #718096;"/>
+                            
+                            <HBox spacing="20">
+                                <VBox spacing="4">
+                                    <Label text="Instruments" style="-fx-text-fill: #718096; -fx-font-size: 12px;"/>
+                                    <Label fx:id="instrumentsLabel" text="Piano, Guitar" 
+                                           style="-fx-font-weight: bold;"/>
+                                </VBox>
+                                <VBox spacing="4">
+                                    <Label text="Experience" style="-fx-text-fill: #718096; -fx-font-size: 12px;"/>
+                                    <Label fx:id="experienceLabel" text="10 years" 
+                                           style="-fx-font-weight: bold;"/>
+                                </VBox>
+                                <VBox spacing="4">
+                                    <Label text="Location" style="-fx-text-fill: #718096; -fx-font-size: 12px;"/>
+                                    <Label fx:id="locationLabel" text="New York" 
+                                           style="-fx-font-weight: bold;"/>
+                                </VBox>
+                                <VBox spacing="4">
+                                    <Label text="Hourly Rate" style="-fx-text-fill: #718096; -fx-font-size: 12px;"/>
+                                    <Label fx:id="rateLabel" text="$50/hr" 
+                                           style="-fx-font-weight: bold; -fx-text-fill: #2D4A47;"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                        
+                        <!-- Book Button -->
+                        <Button text="Book Now" styleClass="primary-button" 
+                                prefWidth="150" prefHeight="50" onAction="#handleBookNow"/>
+                    </HBox>
+                </VBox>
+                
+                <!-- About Section -->
+                <VBox styleClass="card" spacing="16">
+                    <padding>
+                        <Insets top="24" right="24" bottom="24" left="24"/>
+                    </padding>
+                    
+                    <Label text="About" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                    <Label fx:id="biographyLabel" text="No biography available." 
+                           wrapText="true" style="-fx-text-fill: #4A5568; -fx-line-spacing: 4;"/>
+                </VBox>
+                
+                <!-- Available Time Slots Section -->
+                <VBox styleClass="card" spacing="16">
+                    <padding>
+                        <Insets top="24" right="24" bottom="24" left="24"/>
+                    </padding>
+                    
+                    <HBox alignment="CENTER_LEFT" spacing="20">
+                        <Label text="Available Time Slots" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                        <HBox alignment="CENTER_RIGHT" spacing="10" HBox.hgrow="ALWAYS">
+                            <Button text="‹" styleClass="back-button" onAction="#handlePrevWeek"/>
+                            <Label fx:id="weekLabel" text="This Week"/>
+                            <Button text="›" styleClass="back-button" onAction="#handleNextWeek"/>
+                        </HBox>
+                    </HBox>
+                    
+                    <!-- Days of week -->
+                    <HBox spacing="10" alignment="CENTER">
+                        <VBox fx:id="day1Box" styleClass="day-column" spacing="8" alignment="TOP_CENTER"/>
+                        <VBox fx:id="day2Box" styleClass="day-column" spacing="8" alignment="TOP_CENTER"/>
+                        <VBox fx:id="day3Box" styleClass="day-column" spacing="8" alignment="TOP_CENTER"/>
+                        <VBox fx:id="day4Box" styleClass="day-column" spacing="8" alignment="TOP_CENTER"/>
+                        <VBox fx:id="day5Box" styleClass="day-column" spacing="8" alignment="TOP_CENTER"/>
+                        <VBox fx:id="day6Box" styleClass="day-column" spacing="8" alignment="TOP_CENTER"/>
+                        <VBox fx:id="day7Box" styleClass="day-column" spacing="8" alignment="TOP_CENTER"/>
+                    </HBox>
+                </VBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>
