@@ -7,54 +7,39 @@ pipeline {
     }
 
     environment {
+        // Add Anaconda MySQL to PATH (important for your setup)
+        PATH = "/opt/anaconda3/bin:/usr/local/bin:${env.PATH}"
+
         DOCKER_IMAGE = 'music-course-platform'
         DOCKER_TAG = 'latest'
         DB_NAME = 'music_lesson_db'
-        DB_USER = 'root'
-        DB_PASSWORD = 'swp123'
-        DB_PORT = '3307'
     }
 
     stages {
 
         stage('Checkout') {
             steps {
+                echo 'Checking out source code...'
                 checkout scm
-            }
-        }
-
-        stage('Start MySQL Container') {
-            steps {
-                sh """
-                    docker run -d \
-                    --name test-mysql \
-                    -e MYSQL_ROOT_PASSWORD=${DB_PASSWORD} \
-                    -e MYSQL_DATABASE=${DB_NAME} \
-                    -p ${DB_PORT}:3306 \
-                    mysql:8.0
-                """
-            }
-        }
-
-        stage('Wait for Database') {
-            steps {
-                sh 'sleep 20'
             }
         }
 
         stage('Setup Database') {
             steps {
+                echo 'Creating database schema...'
                 dir('MusicCoursePlatform') {
-                    sh """
-                        docker exec -i test-mysql \
-                        mysql -u root -p${DB_PASSWORD} ${DB_NAME} < database/schema.sql
-                    """
+                    withCredentials([string(credentialsId: 'DB_PASSWORD', variable: 'DB_PASSWORD')]) {
+                        sh '''
+                            /opt/anaconda3/bin/mysql -u root -p$DB_PASSWORD < database/schema.sql
+                        '''
+                    }
                 }
             }
         }
 
         stage('Build') {
             steps {
+                echo 'Building project...'
                 dir('MusicCoursePlatform') {
                     sh 'mvn clean compile'
                 }
@@ -63,6 +48,7 @@ pipeline {
 
         stage('Test') {
             steps {
+                echo 'Running unit tests...'
                 dir('MusicCoursePlatform') {
                     sh 'mvn test'
                 }
@@ -74,16 +60,44 @@ pipeline {
             }
         }
 
+        stage('Code Coverage Report') {
+            steps {
+                echo 'Generating JaCoCo report...'
+                dir('MusicCoursePlatform') {
+                    sh 'mvn jacoco:report'
+                }
+            }
+            post {
+                always {
+                    jacoco(
+                        execPattern: 'MusicCoursePlatform/target/jacoco.exec',
+                        classPattern: 'MusicCoursePlatform/target/classes',
+                        sourcePattern: 'MusicCoursePlatform/src/main/java'
+                    )
+                }
+            }
+        }
+
         stage('Package') {
             steps {
+                echo 'Packaging application...'
                 dir('MusicCoursePlatform') {
                     sh 'mvn package -DskipTests'
                 }
             }
         }
 
+        stage('Archive Artifact') {
+            steps {
+                echo 'Archiving JAR file...'
+                archiveArtifacts artifacts: 'MusicCoursePlatform/target/*.jar',
+                        fingerprint: true
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
+                echo 'Building Docker image...'
                 dir('MusicCoursePlatform') {
                     sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
                 }
@@ -92,11 +106,6 @@ pipeline {
     }
 
     post {
-        always {
-            sh 'docker stop test-mysql || true'
-            sh 'docker rm test-mysql || true'
-        }
-
         success {
             echo 'Pipeline completed successfully!'
         }
