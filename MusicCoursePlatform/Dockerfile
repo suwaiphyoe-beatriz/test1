@@ -11,8 +11,8 @@ RUN mvn clean package -DskipTests
 # Run stage
 # -------------------------------
 FROM eclipse-temurin:17-jre
-WORKDIR /app
 
+WORKDIR /app
 COPY --from=build /app/target/MusicCoursePlatform-1.0-SNAPSHOT.jar app.jar
 
 RUN groupadd -r appuser && useradd -r -g appuser appuser
