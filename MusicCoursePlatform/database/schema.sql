@@ -1,28 +1,26 @@
 -- Music Course Platform Database Schema
--- Production + CI/CD Compatible Version
+-- CI/CD Compatible Version
 
--- Create and select database
+-- Create database
 CREATE DATABASE IF NOT EXISTS music_lesson_db;
 USE music_lesson_db;
 
 -- Disable foreign key checks for clean reset
 SET FOREIGN_KEY_CHECKS = 0;
 
--- Drop tables (correct order)
+-- Drop tables in correct order
 DROP TABLE IF EXISTS BOOKING;
 DROP TABLE IF EXISTS TIMESLOT;
 DROP TABLE IF EXISTS LEARNERPROFILE;
 DROP TABLE IF EXISTS TEACHERPROFILE;
 DROP TABLE IF EXISTS USERS;
 
--- Re-enable foreign key checks
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- ==============================
 -- USERS TABLE
 -- ==============================
-CREATE TABLE USERS
-(
+CREATE TABLE USERS (
   user_id INT NOT NULL AUTO_INCREMENT,
   username VARCHAR(50) NOT NULL UNIQUE,
   password_hash VARCHAR(255) NOT NULL,
@@ -33,10 +31,9 @@ CREATE TABLE USERS
 );
 
 -- ==============================
--- TEACHER PROFILE TABLE
+-- TEACHER PROFILE
 -- ==============================
-CREATE TABLE TEACHERPROFILE
-(
+CREATE TABLE TEACHERPROFILE (
   teacher_profile_id INT NOT NULL AUTO_INCREMENT,
   biography VARCHAR(500) DEFAULT '',
   instruments_taught VARCHAR(100) NOT NULL,
@@ -51,10 +48,9 @@ CREATE TABLE TEACHERPROFILE
 );
 
 -- ==============================
--- LEARNER PROFILE TABLE
+-- LEARNER PROFILE
 -- ==============================
-CREATE TABLE LEARNERPROFILE
-(
+CREATE TABLE LEARNERPROFILE (
   learner_profile_id INT NOT NULL AUTO_INCREMENT,
   instrument VARCHAR(100) DEFAULT '',
   created_at DATE NOT NULL DEFAULT (CURRENT_DATE),
@@ -65,10 +61,9 @@ CREATE TABLE LEARNERPROFILE
 );
 
 -- ==============================
--- TIME SLOT TABLE
+-- TIME SLOT
 -- ==============================
-CREATE TABLE TIMESLOT
-(
+CREATE TABLE TIMESLOT (
   slot_id INT NOT NULL AUTO_INCREMENT,
   lesson_date DATE NOT NULL,
   start_time VARCHAR(20) NOT NULL,
@@ -81,10 +76,9 @@ CREATE TABLE TIMESLOT
 );
 
 -- ==============================
--- BOOKING TABLE
+-- BOOKING
 -- ==============================
-CREATE TABLE BOOKING
-(
+CREATE TABLE BOOKING (
   booking_id INT NOT NULL AUTO_INCREMENT,
   booking_date DATE NOT NULL DEFAULT (CURRENT_DATE),
   booking_status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
@@ -101,7 +95,6 @@ CREATE TABLE BOOKING
 -- ==============================
 -- INDEXES
 -- ==============================
-
 CREATE INDEX idx_users_username ON USERS(username);
 CREATE INDEX idx_users_email ON USERS(email);
 CREATE INDEX idx_users_type ON USERS(user_type);
@@ -114,6 +107,3 @@ CREATE INDEX idx_timeslot_date ON TIMESLOT(lesson_date);
 
 CREATE INDEX idx_booking_learner ON BOOKING(learner_profile_id);
 CREATE INDEX idx_booking_slot ON BOOKING(slot_id);
-
--- Re-enable foreign key checks at the end
-SET FOREIGN_KEY_CHECKS = 1;
