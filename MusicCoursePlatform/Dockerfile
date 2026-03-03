@@ -12,7 +12,7 @@ WORKDIR /app
 # 安装 JavaFX 依赖
 RUN apt-get update && apt-get install -y openjfx && rm -rf /var/lib/apt/lists/*
 
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /app/target/MusicCoursePlatform-1.0-SNAPSHOT.jar app.jar
 
 RUN groupadd -r appuser && useradd -r -g appuser appuser
 USER appuser
