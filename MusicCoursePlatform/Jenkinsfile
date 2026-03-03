@@ -70,9 +70,9 @@ pipeline {
             post {
                 always {
                     jacoco(
-                        execPattern: 'MusicCoursePlatform/target/jacoco.exec',
-                        classPattern: 'MusicCoursePlatform/target/classes',
-                        sourcePattern: 'MusicCoursePlatform/src/main/java'
+                            execPattern: 'MusicCoursePlatform/target/jacoco.exec',
+                            classPattern: 'MusicCoursePlatform/target/classes',
+                            sourcePattern: 'MusicCoursePlatform/src/main/java'
                     )
                 }
             }
